@@ -1,6 +1,7 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import GlobalStyles from "./component/GlobalStyles";
 import HomePage from "./component/HomePage";
+import LoginPage from "./component/LoginPage";
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,9 @@ function App() {
       >
         <Switch>
           <Route exact path="/">
+            <LoginPage />
+          </Route>
+          <Route exact path="/home">
             <HomePage />
           </Route>
           {/* <Route path="/signin">
