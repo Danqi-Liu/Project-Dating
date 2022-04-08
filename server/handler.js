@@ -46,9 +46,6 @@ const searchUsers = async (req, res) => {
           { "location.city": { $regex: keywords } },
           { gender: { $regex: keywords } },
           { email: { $regex: keywords } },
-          { "login.username": { $regex: keywords } },
-          { "id.name": { $regex: keywords } },
-          { nat: { $regex: keywords } },
         ],
       })
       .toArray();
@@ -190,7 +187,7 @@ const getMyMessage = async (req, res) => {
   }
   client.close();
 };
-//expect body={name:{first,last},email,gender,location:{city,state,counrty},dob:{data,age},nat}
+//expect body={name:{first,last},email,gender,location:{city,state,counrty},dob:{data,age}}
 const addUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const obj = { ...req.body };
@@ -204,6 +201,78 @@ const addUser = async (req, res) => {
   }
   client.close();
 };
+//expect body={friends:[],email}
+const addFriend = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { friends, email } = req.body;
+  console.log(req.body);
+  try {
+    await client.connect();
+    const db = client.db("dating");
+    const query = { email };
+    const newValues = {
+      $set: { friends },
+    };
+    const result = await db.collection("users").updateOne(query, newValues);
+    if (result.modifiedCount === 1) {
+      res
+        .status(200)
+        .json({ status: 200, data: req.body, message: "firend list updated" });
+    } else if (result.modifiedCount === 0 && result.matchedCount === 1) {
+      res.status(400).json({
+        status: 400,
+        data: req.body,
+        message: "same friend infomation, no need to update",
+      });
+    } else {
+      res
+        .status(404)
+        .json({ status: 404, data: req.body, message: "Not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+};
+//expect body=user
+const addUserOline = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const obj = { ...req.body };
+  try {
+    await client.connect();
+    const db = client.db("dating");
+    const result = await db.collection("online").insertOne(obj);
+    res
+      .status(201)
+      .json({ status: 201, data: obj, message: "online user added" });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+};
+//expect body={email}
+const deleteUserOnline = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const email = req.params.email;
+  console.log(email);
+  try {
+    await client.connect();
+    const db = client.db("dating");
+    const result = await db.collection("online").deleteMany({ email });
+    result.deletedCount >= 1
+      ? res.status(204).json({
+          status: 204,
+          data: email,
+          message: "1 user deleted from online list",
+        })
+      : res
+          .status(404)
+          .json({ status: 404, data: email, message: "Not found" });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+};
 module.exports = {
   getUsers,
   searchUsers,
@@ -212,4 +281,7 @@ module.exports = {
   leaveMessage,
   getMyMessage,
   addUser,
+  addFriend,
+  addUserOline,
+  deleteUserOnline,
 };

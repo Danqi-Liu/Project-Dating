@@ -12,9 +12,10 @@ const {
   leaveMessage,
   getMyMessage,
   addUser,
+  addFriend,
+  addUserOline,
+  deleteUserOnline,
 } = require("./handler");
-
-const { countryInformation } = require("../server/data/countryData");
 
 express()
   .use(function (req, res, next) {
@@ -50,6 +51,12 @@ express()
   .get("/api/get-myMessage", getMyMessage)
   //add new user
   .post("/api/add-user", addUser)
+  //add friend to current user
+  .patch("/api/add-friends", addFriend)
+  //add user to online list
+  .post("/api/add-user-online", addUserOline)
+  //delete a user from online list
+  .delete("/api/delete-user-online/:email", deleteUserOnline)
 
   // Handles all the endpoints
   .get("*", (req, res) => {

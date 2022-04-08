@@ -9,10 +9,13 @@ const options = {
 };
 
 const batchImport = async () => {
+  const newUsers = users.map((user) => {
+    return { ...user, friends: [] };
+  });
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   const db = client.db("dating");
-  await db.collection("users").insertMany(users);
+  await db.collection("users").insertMany(newUsers);
   client.close();
 };
 
