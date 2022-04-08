@@ -4,7 +4,15 @@ const express = require("express");
 const morgan = require("morgan");
 
 const PORT = 8000;
-const { getUsers } = require("./handler");
+const {
+  getUsers,
+  searchUsers,
+  searchUsersGenderAge,
+  getRandomUsers,
+  leaveMessage,
+  getMyMessage,
+  addUser,
+} = require("./handler");
 
 const { countryInformation } = require("../server/data/countryData");
 
@@ -30,6 +38,18 @@ express()
 
   // Gets list of all items in database
   .get("/api/get-users", getUsers)
+  //search users
+  .get("/api/search-users", searchUsers)
+  //search users by gender and age
+  .get("/api/search-gender-age", searchUsersGenderAge)
+  //get some random users
+  .get("/api/get-random-users", getRandomUsers)
+  //post messages
+  .post("/api/leave-message", leaveMessage)
+  //get message by current user email
+  .get("/api/get-myMessage", getMyMessage)
+  //add new user
+  .post("/api/add-user", addUser)
 
   // Handles all the endpoints
   .get("*", (req, res) => {
