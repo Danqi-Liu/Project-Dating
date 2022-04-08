@@ -1,5 +1,5 @@
-const companies = require("./data/companies.json");
-const items = require("./data/items.json");
+//fetched fake user data from free API "random user generator"
+const users = require("./data/users.json");
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
 const { MONGO_URI } = process.env;
@@ -11,11 +11,8 @@ const options = {
 const batchImport = async () => {
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
-  const db = client.db("ecommerce");
-  const result = await db.collection("companies").insertMany(companies);
-  console.log(result);
-  const result2 = await db.collection("items").insertMany(items);
-  console.log(result2);
+  const db = client.db("dating");
+  await db.collection("users").insertMany(users);
   client.close();
 };
 
