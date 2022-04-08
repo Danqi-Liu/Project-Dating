@@ -2,6 +2,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import GlobalStyles from "./component/GlobalStyles";
 import HomePage from "./component/HomePage";
 import LoginPage from "./component/LoginPage";
+import UserProfile from "./component/UserProfile";
 function App() {
   return (
     <BrowserRouter>
@@ -22,10 +23,10 @@ function App() {
           </Route>
           {/* <Route path="/signin">
             <SignIn />
-          </Route>
-          <Route path="/users/:id">
-            <UserProfile />
           </Route> */}
+          <Route path="/users/:email">
+            <UserProfile />
+          </Route>
         </Switch>
       </div>
     </BrowserRouter>
