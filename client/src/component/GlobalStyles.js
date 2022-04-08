@@ -7,11 +7,11 @@ export default createGlobalStyle`
       --primary-color: #cc5500;
       --secondry-color:#cc5500;
       --accent-bg-color: rgba(204, 85, 0, 0.1);
-      --main-bg-color:white;
+      --main-bg-color:pink;
       --text-color:white;
       --page-horizontal-padding: 20px;
       --header-height: 50px;
-      --max-content-width: 1200px;
+      --max-content-width: 100vw;
       --heading-font-family: 'Teko', sans-serif;
       --user-img-width: 120px;
     }
