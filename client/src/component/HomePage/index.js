@@ -4,6 +4,7 @@ import { Header } from "./Header";
 import { UserCell } from "./UserCell";
 import { SlideShow } from "./SlideShow";
 import styled from "styled-components";
+import { Sidebar } from "./SideBar";
 const HomePage = () => {
   const { status, users, renderUsers, setRenderUsers, count, setCount } =
     useContext(UsersContext);
@@ -25,15 +26,15 @@ const HomePage = () => {
         <h1>Loading</h1>
       ) : (
         <>
-          <div>
-            <div>side bar</div>
+          <ContentContainer>
+            <Sidebar />
             <UserImgContainer>
               {renderUsers.map((el) => {
                 console.log("el", el);
                 return <UserCell key={el.email} userInfo={el} />;
               })}
             </UserImgContainer>
-          </div>
+          </ContentContainer>
           <button onClick={handleLoadMore}>Load more</button>
         </>
       )}
@@ -41,11 +42,16 @@ const HomePage = () => {
   );
 };
 const UserImgContainer = styled.div`
+  margin-left: 20vw;
   display: flex;
   width: 75vw;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
   background: var(--main-bg-color);
+`;
+const ContentContainer = styled.div`
+  display: grid;
+  grid-template-columns: 20vw 80vw;
 `;
 export default HomePage;

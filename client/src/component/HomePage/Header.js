@@ -53,19 +53,23 @@ export const Header = () => {
   );
 };
 const Wrapper = styled.div`
-  width: 100vw;
+  width: 95vw;
   height: 60px;
-  display: grid;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  /* padding-right: 20px; */
   background: var(--main-bg-color);
-  grid-template-columns: 20vw 20vw 20vw 20vw;
+  /* grid-template-columns: 15vw 35vw 20vw 20vw; */
   img {
     width: 60px;
   }
   input {
     height: 40px;
+    width: 5rem;
   }
   button {
     height: 40px;
+    width: 5rem;
   }
 `;

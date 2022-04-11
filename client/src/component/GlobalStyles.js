@@ -8,15 +8,31 @@ export default createGlobalStyle`
       --secondry-color:#cc5500;
       --accent-bg-color: rgba(204, 85, 0, 0.1);
       --main-bg-color:pink;
-      --text-color:white;
+      --secondry-bg-color:lightgray;
+      --text-color:black;
       --page-horizontal-padding: 20px;
       --header-height: 50px;
-      --max-content-width: 100vw;
+      --max-content-width: 99vw;
       --heading-font-family: 'Teko', sans-serif;
       --user-img-width: 160px;
     }
+    html
+    { margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 20px;
+        vertical-align: baseline;
+        box-sizing: border-box;
+    }
+ @media (max-width: 900px) {
+  html { font-size: 15px; }
+}
+@media (max-width: 600px) {
+  html { font-size: 10px; }
+}
+    
 
-    html, body, div, span, applet, object, iframe,
+     button,body, div, span, applet, object, iframe,
     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
     a, abbr, acronym, address, big, cite, code,
     del, dfn, em, img, ins, kbd, q, s, samp,
@@ -32,7 +48,7 @@ export default createGlobalStyle`
         margin: 0;
         padding: 0;
         border: 0;
-        font-size: 100%;
+        font-size: 1 rem;
         vertical-align: baseline;
         box-sizing: border-box;
     }
@@ -60,9 +76,9 @@ export default createGlobalStyle`
       font-family: var(--heading-font-family);
     }
     h2 {
-      font-size: 28px;
+      font-size: 1.5rem;
     }
     h1{
-        font-size:32px;
+        font-size:2rem;
     }
 `;
