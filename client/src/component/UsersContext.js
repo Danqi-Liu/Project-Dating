@@ -4,6 +4,7 @@ export const UsersContext = createContext(null);
 export const UsersContextProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [renderUsers, setRenderUsers] = useState([]);
+  const [count, setCount] = useState(1);
   const [status, setStatus] = useState("loading");
   const time = checkSessionStorage("timer", 0);
   const currentTime = Date.now();
@@ -14,9 +15,10 @@ export const UsersContextProvider = ({ children }) => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data.message);
+          let user20Arr = data.data.filter((el, index) => index <= 19);
           setUsers(data.data);
           setStatus("idle");
-          setRenderUsers(data.data);
+          setRenderUsers([...user20Arr]);
           sessionStorage.setItem("users", JSON.stringify(data.data));
         })
         .catch((err) => console.log(err.message));
@@ -32,6 +34,8 @@ export const UsersContextProvider = ({ children }) => {
         users,
         status,
         renderUsers,
+        count,
+        setCount,
         setUsers,
         setStatus,
         setRenderUsers,

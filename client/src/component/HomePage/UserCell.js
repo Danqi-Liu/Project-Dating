@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { CurrentUserContext } from "../CurrentUserContext";
 export const UserCell = ({ userInfo }) => {
   const { name, email, gender, dob, location, picture } = userInfo;
-  console.log(userInfo);
+
   return (
     <>
       <MyLink to={`/users/${email}`}>

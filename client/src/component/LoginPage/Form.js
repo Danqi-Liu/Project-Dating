@@ -1,8 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-
+import { CurrentUserContext } from "../CurrentUserContext";
+import { useContext } from "react";
 export const Form = ({ email, src }) => {
+  const { setCurrentUser } = useContext(CurrentUserContext);
   const [inputs, setInputs] = useState({
     name: { first: "", last: "" },
     email: email,
@@ -30,7 +32,8 @@ export const Form = ({ email, src }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data.message);
-        sessionStorage.setItem("user", JSON.stringify(data.data));
+        sessionStorage.setItem("currentUser", JSON.stringify(data.data));
+        setCurrentUser({ ...data.data });
         history.push("/home");
       })
       .catch((err) => console.log(err.message));
