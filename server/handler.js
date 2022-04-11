@@ -71,17 +71,29 @@ const searchUsers = async (req, res) => {
   client.close();
 };
 
-const searchUsersGenderAge = async (req, res) => {
+const searchUsersGenderAgeLocation = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const gender = req.query.gender;
-  const age = Number(req.query.age);
+  const startAge = Number(req.query.startAge);
+  const endAge = Number(req.query.endAge);
+  const location = new RegExp(req.query.location, "i");
+  console.log(location);
   try {
     await client.connect();
     const db = client.db("dating");
     const result = await db
       .collection("users")
       .find({
-        $and: [{ gender: gender }, { "dob.age": { $gte: age, $lt: age + 10 } }],
+        $and: [
+          { gender: gender },
+          { "dob.age": { $gte: startAge, $lte: endAge } },
+          {
+            $or: [
+              { "location.country": { $regex: location } },
+              { "location.city": { $regex: location } },
+            ],
+          },
+        ],
       })
       .toArray();
     if (result.length) {
@@ -277,7 +289,7 @@ const deleteUserOnline = async (req, res) => {
 module.exports = {
   getUsers,
   searchUsers,
-  searchUsersGenderAge,
+  searchUsersGenderAgeLocation,
   getRandomUsers,
   leaveMessage,
   getMyMessage,

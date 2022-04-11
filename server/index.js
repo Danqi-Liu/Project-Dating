@@ -7,7 +7,7 @@ const PORT = 8000;
 const {
   getUsers,
   searchUsers,
-  searchUsersGenderAge,
+  searchUsersGenderAgeLocation,
   getRandomUsers,
   leaveMessage,
   getMyMessage,
@@ -42,7 +42,7 @@ express()
   //search users
   .get("/api/search-users", searchUsers)
   //search users by gender and age
-  .get("/api/search-gender-age", searchUsersGenderAge)
+  .get("/api/search-gender-age-location", searchUsersGenderAgeLocation)
   //get some random users
   .get("/api/get-random-users", getRandomUsers)
   //post messages
