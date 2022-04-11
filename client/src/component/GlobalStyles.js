@@ -13,7 +13,7 @@ export default createGlobalStyle`
       --header-height: 50px;
       --max-content-width: 100vw;
       --heading-font-family: 'Teko', sans-serif;
-      --user-img-width: 120px;
+      --user-img-width: 160px;
     }
 
     html, body, div, span, applet, object, iframe,

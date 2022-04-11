@@ -11,7 +11,7 @@ function App() {
         style={{
           background: "var(--main-bg-color)",
           width: "var(--max-content-width)",
-          height: "100vh",
+          minHeight: "100vh",
         }}
       >
         <Switch>
