@@ -10,7 +10,7 @@ function App() {
       <div
         style={{
           background: "var(--main-bg-color)",
-          width: "var(--max-content-width)",
+          width: "max-content-width",
           minHeight: "100vh",
         }}
       >

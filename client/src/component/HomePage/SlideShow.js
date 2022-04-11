@@ -31,7 +31,7 @@ export const SlideShow = () => {
     return <h1>loading</h1>;
   }
   return (
-    <div>
+    <Wrapper>
       <div>
         <Slide {...properties}>
           {randomUsers.map((user) => {
@@ -43,7 +43,7 @@ export const SlideShow = () => {
           })}
         </Slide>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 
@@ -59,4 +59,9 @@ const MyLink = styled(Link)`
       box-shadow: 0 0 10px;
     }
   }
+`;
+const Wrapper = styled.div`
+  width: 95vw;
+  padding-left: 10px;
+  align-items: center;
 `;
