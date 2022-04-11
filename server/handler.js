@@ -32,6 +32,7 @@ const getUsers = async (req, res) => {
 const searchUsers = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const keywords = new RegExp(req.query.keywords, "i");
+  const keywordGender = new RegExp("^" + req.query.keywords, "i");
   try {
     await client.connect();
     const db = client.db("dating");
@@ -44,7 +45,7 @@ const searchUsers = async (req, res) => {
           { "location.country": { $regex: keywords } },
           { "location.state": { $regex: keywords } },
           { "location.city": { $regex: keywords } },
-          { gender: { $regex: keywords } },
+          { gender: { $regex: keywordGender } },
           { email: { $regex: keywords } },
         ],
       })
@@ -111,7 +112,7 @@ const getRandomUsers = async (req, res) => {
     const db = client.db("dating");
     const result = await db
       .collection("users")
-      .aggregate([{ $sample: { size: 100 } }])
+      .aggregate([{ $sample: { size: 50 } }])
       .toArray();
     if (result.length) {
       res.status(200).json({
