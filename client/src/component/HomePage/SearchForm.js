@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UsersContext } from "../UsersContext";
+import { useHistory } from "react-router-dom";
 export const SearchForm = ({ setSearchFormOpened }) => {
-  const selectContent = [
-    "Looking for a Woman",
-    "Looking for a Man",
-    "Looking for a Woman or Man",
-  ];
+  const history = useHistory();
+  const { setUsers, setRenderUsers, setCount, setStatus } =
+    useContext(UsersContext);
   const startAge = [18, 20, 25, 30, 35, 40, 45, 50, 60, 70];
-  const endAge = [20, 25, 30, 35, 40, 45, 50, 60, 70, "80+"];
+  const endAge = [20, 25, 30, 35, 40, 45, 50, 60, 70, 80];
   const [inputs, setInputs] = useState({
     gender: "female",
     startAge: 18,
@@ -21,8 +21,29 @@ export const SearchForm = ({ setSearchFormOpened }) => {
   };
   const handleSubmit = (ev) => {
     ev.preventDefault();
-    console.log(inputs);
     setSearchFormOpened(false);
+    history.push("/home");
+    setStatus("loading");
+
+    const searchString = `gender=${inputs.gender}&startAge=${inputs.startAge}&endAge=${inputs.endAge}&location=${inputs.location}`;
+    fetch(`/api/search-gender-age-location?${searchString}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 200) {
+          console.log(data.data);
+          let user20Arr = data.data.filter((el, index) => index <= 19);
+          console.log(user20Arr);
+          setRenderUsers([...user20Arr]);
+          setUsers([...data.data]);
+          setCount(1);
+          setStatus("idle");
+        } else {
+          setRenderUsers([]);
+          setCount(0);
+          setStatus("idle");
+        }
+      })
+      .catch((err) => console.log(err.message));
   };
   return (
     <MyForm onSubmit={handleSubmit}>

@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { checkSessionStorage } from "./CheckSessionStorage";
 export const UsersContext = createContext(null);
 export const UsersContextProvider = ({ children }) => {
+  const [allUsers, setAllUsers] = useState([]);
   const [users, setUsers] = useState([]);
   const [renderUsers, setRenderUsers] = useState([]);
   const [count, setCount] = useState(1);
@@ -17,6 +18,7 @@ export const UsersContextProvider = ({ children }) => {
           console.log(data.message);
           let user20Arr = data.data.filter((el, index) => index <= 19);
           setUsers(data.data);
+          setAllUsers(data.data);
           setStatus("idle");
           setRenderUsers([...user20Arr]);
           sessionStorage.setItem("users", JSON.stringify(data.data));
@@ -24,6 +26,7 @@ export const UsersContextProvider = ({ children }) => {
         .catch((err) => console.log(err.message));
     } else {
       setUsers(checkSessionStorage("users", []));
+      setAllUsers(checkSessionStorage("users", []));
       setRenderUsers(checkSessionStorage("users", []));
       setStatus("idle");
     }
@@ -35,6 +38,8 @@ export const UsersContextProvider = ({ children }) => {
         status,
         renderUsers,
         count,
+        allUsers,
+        setAllUsers,
         setCount,
         setUsers,
         setStatus,

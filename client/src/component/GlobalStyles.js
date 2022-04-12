@@ -10,6 +10,8 @@ export default createGlobalStyle`
       --main-bg-color:pink;
       --secondry-bg-color:lightgray;
       --text-color:black;
+      --text-color2:white;
+      --hover-color:red;
       --page-horizontal-padding: 20px;
       --header-height: 50px;
       --max-content-width: 99vw;
@@ -79,6 +81,6 @@ export default createGlobalStyle`
       font-size: 1.5rem;
     }
     h1{
-        font-size:2rem;
+        font-size:1.8rem;
     }
 `;

@@ -19,7 +19,7 @@ export const Sidebar = () => {
         </NavigationLink>
       </li>
       <li>
-        <NavigationLink to={`/users/${currentUser.email}`}>
+        <NavigationLink to="/currentUserProfile">
           <FiUser />
           <MediaQuerySpan>&nbsp;&nbsp;Profile</MediaQuerySpan>
         </NavigationLink>
