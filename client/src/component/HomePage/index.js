@@ -13,7 +13,9 @@ const HomePage = () => {
   const handleLoadMore = () => {
     let user20Array = [];
     for (let index = count * 20; index < (count + 1) * 20; index++) {
-      user20Array.push(users[index]);
+      if (users.length > index) {
+        user20Array.push(users[index]);
+      }
     }
     setRenderUsers([...renderUsers, ...user20Array]);
     setCount(count + 1);
@@ -30,8 +32,7 @@ const HomePage = () => {
             <Sidebar />
             <UserImgContainer>
               {renderUsers.map((el) => {
-                console.log("el", el);
-                return <UserCell key={el.email} userInfo={el} />;
+                return <UserCell key={el._id} userInfo={el} />;
               })}
             </UserImgContainer>
           </ContentContainer>

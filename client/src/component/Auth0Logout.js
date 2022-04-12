@@ -7,7 +7,12 @@ const LogoutButton = () => {
   return (
     <button
       onClick={() => {
+        const user = JSON.parse(sessionStorage.getItem("currentUser"));
+
         sessionStorage.removeItem("currentUser");
+        fetch(`/api/delete-user-online/${user.email}`, { method: "DELETE" })
+          .then(() => console.log("online user deleted"))
+          .catch((err) => console.log(err.message));
         return logout({ returnTo: window.location.origin });
       }}
     >

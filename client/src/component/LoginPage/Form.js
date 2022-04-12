@@ -2,9 +2,11 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { CurrentUserContext } from "../CurrentUserContext";
+import { UsersContext } from "../UsersContext";
 import { useContext } from "react";
 export const Form = ({ email, src }) => {
   const { setCurrentUser } = useContext(CurrentUserContext);
+  const { allUsers, setAllUsers } = useContext(UsersContext);
   const [inputs, setInputs] = useState({
     name: { first: "", last: "" },
     email: email,
@@ -34,7 +36,23 @@ export const Form = ({ email, src }) => {
         console.log(data.message);
         sessionStorage.setItem("currentUser", JSON.stringify(data.data));
         setCurrentUser({ ...data.data });
-        history.push("/home");
+        setAllUsers([...allUsers, inputs]);
+        return fetch("/api/add-user-online", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            ...inputs,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.message);
+            history.push("/home");
+          })
+          .catch((err) => console.log(err.message));
       })
       .catch((err) => console.log(err.message));
   };

@@ -5,19 +5,33 @@ import { UsersContext } from "../UsersContext";
 import { CurrentUserContext } from "../CurrentUserContext";
 import { useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { checkSessionStorage } from "../CheckSessionStorage";
 const LoginPage = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
-  const { users, status } = useContext(UsersContext);
+  const { allUsers, status } = useContext(UsersContext);
   const { setCurrentUser } = useContext(CurrentUserContext);
   const history = useHistory();
   const handleClick = () => {
-    users.forEach((el) => {
+    allUsers.forEach((el) => {
       if (el.email === user.email) {
         setCurrentUser({ ...el });
         sessionStorage.setItem("currentUser", JSON.stringify({ ...el }));
       }
     });
-    history.push("/home");
+    fetch("/api/add-user-online", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify({ ...checkSessionStorage("currentUser", {}) }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.message);
+        history.push("/home");
+      })
+      .catch((err) => console.log(err.message));
   };
   if (!isAuthenticated) {
     return <LoginButton />;
@@ -31,7 +45,7 @@ const LoginPage = () => {
         <img src={user.picture} alt={user.name} />
         <h2>{user.name}</h2>
         <p>{user.email}</p>
-        {users.some((el) => el.email === user.email) ? (
+        {allUsers.some((el) => el.email === user.email) ? (
           <button onClick={handleClick}>go to home</button>
         ) : (
           <Form email={user.email} src={user.picture} />

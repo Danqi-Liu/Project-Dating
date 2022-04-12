@@ -2,7 +2,9 @@ import styled from "styled-components";
 import { useState, useContext } from "react";
 import LogoutButton from "../Auth0Logout";
 import { UsersContext } from "../UsersContext";
+import { useHistory, Link } from "react-router-dom";
 export const Header = () => {
+  const history = useHistory();
   const [search, setSearch] = useState("");
   const { setStatus, setRenderUsers, setCount, setUsers } =
     useContext(UsersContext);
@@ -10,7 +12,7 @@ export const Header = () => {
     ev.preventDefault();
 
     const keyword = search.trim();
-
+    history.push("/home");
     if (keyword === "") {
       return;
     } else {
@@ -37,7 +39,10 @@ export const Header = () => {
   };
   return (
     <Wrapper>
-      <img alt="heart img" src="./heart.png" />
+      <MyLink to="/home">
+        <img alt="heart img" src={process.env.PUBLIC_URL + "/heart.png"} />
+        <span>Lovigo</span>
+      </MyLink>
       <form onSubmit={handleSearch}>
         <input
           type="text"
@@ -47,7 +52,7 @@ export const Header = () => {
         ></input>
         <button type="submit">Search</button>
       </form>
-      <button>In box</button>
+      <button>Theme</button>
       <LogoutButton />
     </Wrapper>
   );
@@ -58,18 +63,36 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* padding-right: 20px; */
   background: var(--main-bg-color);
-  /* grid-template-columns: 15vw 35vw 20vw 20vw; */
   img {
     width: 60px;
   }
   input {
-    height: 40px;
+    height: 20px;
     width: 5rem;
+    border-radius: 4px;
   }
   button {
-    height: 40px;
-    width: 5rem;
+    height: 60px;
+    width: 7rem;
+    font-size: 20px;
+    font-weight: 700;
+    background: var(--main-bg-color);
+    &:hover {
+      color: var(--hover-color);
+      background: var(--secondry-bg-color);
+      transform: scale(1.05);
+    }
   }
+  span {
+    font-family: "Beau Rivage", cursive;
+    font-weight: 700;
+    font-size: 35px;
+    position: absolute;
+    top: 10px;
+  }
+`;
+const MyLink = styled(Link)`
+  position: relative;
+  height: 60px;
 `;

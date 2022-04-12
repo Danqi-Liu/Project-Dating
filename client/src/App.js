@@ -3,6 +3,7 @@ import GlobalStyles from "./component/GlobalStyles";
 import HomePage from "./component/HomePage";
 import LoginPage from "./component/LoginPage";
 import UserProfile from "./component/UserProfile";
+import { CurrentUserProfile } from "./component/CurrentUserProfile";
 function App() {
   return (
     <BrowserRouter>
@@ -21,9 +22,9 @@ function App() {
           <Route exact path="/home">
             <HomePage />
           </Route>
-          {/* <Route path="/signin">
-            <SignIn />
-          </Route> */}
+          <Route path="/currentUserProfile">
+            <CurrentUserProfile />
+          </Route>
           <Route path="/users/:email">
             <UserProfile />
           </Route>
