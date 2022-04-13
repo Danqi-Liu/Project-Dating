@@ -4,6 +4,7 @@ import HomePage from "./component/HomePage";
 import LoginPage from "./component/LoginPage";
 import UserProfile from "./component/UserProfile";
 import { CurrentUserProfile } from "./component/CurrentUserProfile";
+import { Inbox } from "./component/CurrentUserProfile/Inbox";
 function App() {
   return (
     <BrowserRouter>
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route path="/users/:email">
             <UserProfile />
+          </Route>
+          <Route path="/inbox">
+            <Inbox />
           </Route>
         </Switch>
       </div>

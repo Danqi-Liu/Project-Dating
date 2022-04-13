@@ -18,11 +18,12 @@ export const UserCell = ({ userInfo }) => {
 };
 
 const Img = styled.img`
-  width: var(--user-img-width);
-  border: 2px var(--primary-color) solid;
+  width: 8rem;
+  border: 1px var(--primary-color) solid;
+  border-radius: 4px;
   &:hover {
     transform: scale(0.98);
-    border: 6px var(--primary-color) solid;
+    border: 2px var(--primary-color) solid;
   }
 `;
 const MyLink = styled(Link)`

@@ -36,7 +36,7 @@ const HomePage = () => {
               })}
             </UserImgContainer>
           </ContentContainer>
-          <button onClick={handleLoadMore}>Load more</button>
+          <Button onClick={handleLoadMore}>Load more</Button>
         </>
       )}
     </>
@@ -54,5 +54,18 @@ const UserImgContainer = styled.div`
 const ContentContainer = styled.div`
   display: grid;
   grid-template-columns: 20vw 80vw;
+`;
+const Button = styled.button`
+  margin-top: 20px;
+  font-size: 1.5rem;
+  margin-left: 50vw;
+  background: var(--secondry-bg-color);
+  border-radius: 4px;
+  box-shadow: 0 0 5px;
+  &:hover {
+    color: var(--hover-color);
+    transform: scale(1.05);
+    cursor: pointer;
+  }
 `;
 export default HomePage;

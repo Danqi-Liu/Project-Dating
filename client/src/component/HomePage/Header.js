@@ -6,13 +6,13 @@ import { useHistory, Link } from "react-router-dom";
 export const Header = () => {
   const history = useHistory();
   const [search, setSearch] = useState("");
-  const { setStatus, setRenderUsers, setCount, setUsers } =
+  const { status, setStatus, setRenderUsers, setCount, setUsers } =
     useContext(UsersContext);
   const handleSearch = (ev) => {
     ev.preventDefault();
 
     const keyword = search.trim();
-    history.push("/home");
+
     if (keyword === "") {
       return;
     } else {
@@ -28,6 +28,8 @@ export const Header = () => {
             setUsers([...data.data]);
             setCount(1);
             setStatus("idle");
+            setSearch("");
+            history.push("/home");
           } else {
             setRenderUsers([]);
             setCount(0);
@@ -50,7 +52,9 @@ export const Header = () => {
           onChange={(ev) => setSearch(ev.target.value)}
           placeholder="search here"
         ></input>
-        <button type="submit">Search</button>
+        <button type="submit" disabled={status === "loading" ? true : false}>
+          Search
+        </button>
       </form>
       <button>Theme</button>
       <LogoutButton />
@@ -71,17 +75,21 @@ const Wrapper = styled.div`
     height: 20px;
     width: 5rem;
     border-radius: 4px;
+    font-size: 0.8rem;
   }
   button {
+    font-size: 1.3rem;
     height: 60px;
     width: 7rem;
-    font-size: 20px;
     font-weight: 700;
     background: var(--main-bg-color);
     &:hover {
       color: var(--hover-color);
       background: var(--secondry-bg-color);
       transform: scale(1.05);
+    }
+    &:disabled {
+      opacity: 60%;
     }
   }
   span {
