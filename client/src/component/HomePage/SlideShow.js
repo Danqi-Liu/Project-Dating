@@ -36,7 +36,7 @@ export const SlideShow = () => {
         <Slide {...properties}>
           {randomUsers.map((user) => {
             return (
-              <MyLink key={user.email} to={`/users/${user.email}`}>
+              <MyLink key={user._id} to={`/users/${user.email}`}>
                 <img key={user._id} alt="image" src={user.picture.thumbnail} />
               </MyLink>
             );
