@@ -49,10 +49,11 @@ export const SlideShow = () => {
 
 const MyLink = styled(Link)`
   padding: 0 0 0 30px;
-  background: var(--main-bg-color);
+  background: transparent;
   img {
-    width: 70px;
+    width: 3rem;
     border-radius: 40%;
+    z-index: 1;
 
     &:hover {
       transform: scale(0.9);

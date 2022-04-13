@@ -30,7 +30,7 @@ export default createGlobalStyle`
   html { font-size: 15px; }
 }
 @media (max-width: 600px) {
-  html { font-size: 10px; }
+  html { font-size: 12px; }
 }
     
 

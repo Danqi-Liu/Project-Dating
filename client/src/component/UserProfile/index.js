@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UsersContext } from "../UsersContext";
 import { CurrentUserContext } from "../CurrentUserContext";
@@ -6,6 +6,7 @@ import styled, { keyframes } from "styled-components";
 import { Header } from "../HomePage/Header";
 import { Sidebar } from "../HomePage/SideBar";
 import { LeaveMessage } from "./LeaveMessage";
+
 const UserProfile = () => {
   const profileBGSource = [
     "/profile_bg_1.jpg",
@@ -19,13 +20,22 @@ const UserProfile = () => {
     "/profile_bg_9.jpg",
     "/profile_bg_10.jpg",
   ];
-  const { currentUser } = useContext(CurrentUserContext);
-  const { email } = useParams();
-  const { allUsers, status } = useContext(UsersContext);
 
-  let user = [];
+  const { email } = useParams();
+  const { currentUser } = useContext(CurrentUserContext);
+  const { allUsers, status } = useContext(UsersContext);
+  let birthday = "";
+  let user = {};
+
   if (status === "idle") {
-    user = allUsers.filter((el) => el.email === email);
+    let arr = allUsers.filter((el) => el.email === email);
+    user = { ...arr[0] };
+    console.log(user);
+    if (user.dob.date.length > 10) {
+      birthday = user.dob.date.slice(0, 10);
+    } else {
+      birthday = user.dob.date;
+    }
   }
 
   return (
@@ -44,12 +54,26 @@ const UserProfile = () => {
           <h1>loading</h1>
         ) : (
           <>
-            <UserImg alt="user img" src={user[0].picture.large} />
+            <UserImg alt="user img" src={user.picture.large} />
             <h1>
-              {user[0].name.first} {user[0].name.last} {user[0].dob.age}
+              {user.name.first} {user.name.last} {user.dob.age}
             </h1>
           </>
         )}
+        {status === "loading" ? (
+          <h1>loading</h1>
+        ) : (
+          <div>
+            <p>About {user.gender === "male" ? "him" : "her"}:</p>
+            <p>Email: &nbsp; {user.email}</p>
+            <p>Birthday: &nbsp;{birthday}</p>
+            <p>
+              City: &nbsp;{user.location.city} &nbsp;&nbsp;&nbsp;Country:&nbsp;
+              {user.location.country}
+            </p>
+          </div>
+        )}
+
         <div>
           <LeaveMessage senderEmail={currentUser.email} recieverEmail={email} />
         </div>
@@ -84,7 +108,7 @@ const Wrapper = styled.div`
   div {
     font-weight: 700;
     color: var(--text-color);
-    margin-top: 5rem;
+    margin-top: 4rem;
     background-image: url("http://localhost:3000/double-heart.png");
     background-repeat: no-repeat;
     background-color: var(--secondry-bg-color);
@@ -92,6 +116,10 @@ const Wrapper = styled.div`
     background-size: 4rem;
     height: 4rem;
     width: 75vw;
+    box-shadow: 5px 5px 5px;
+  }
+  p {
+    margin-left: 4rem;
   }
 `;
 const Img = styled.img`

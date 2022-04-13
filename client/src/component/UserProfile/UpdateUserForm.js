@@ -1,30 +1,20 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
 import { CurrentUserContext } from "../CurrentUserContext";
 import { UsersContext } from "../UsersContext";
 import { useContext } from "react";
-export const Form = ({ email, src, user }) => {
+export const UpdateUserForm = ({ user }) => {
   const { setCurrentUser } = useContext(CurrentUserContext);
   const { allUsers, setAllUsers } = useContext(UsersContext);
-  const [inputs, setInputs] = useState(
-    user || {
-      name: { first: "", last: "" },
-      email: email,
-      gender: "",
-      location: { city: "", state: "", country: "" },
-      dob: { date: "", age: "" },
-      picture: { large: src, medium: src, thumbnail: src },
-    }
-  );
+  const [inputs, setInputs] = useState(user);
   const [disabledButton, setDisabledButton] = useState(false);
-  let history = useHistory();
+
   const handleSubmit = (ev) => {
-    console.log(inputs);
+    console.log("update user form:", inputs);
     ev.preventDefault();
     setDisabledButton(true);
-    fetch("/api/add-user", {
-      method: "POST",
+    fetch("/api/update-user", {
+      method: "PUT",
       headers: {
         "content-type": "application/json",
         accept: "application/json",
@@ -36,25 +26,10 @@ export const Form = ({ email, src, user }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data.message);
-        sessionStorage.setItem("currentUser", JSON.stringify(data.date));
+        sessionStorage.setItem("currentUser", JSON.stringify(data.data));
         setCurrentUser({ ...data.data });
         setAllUsers([...allUsers, inputs]);
-        return fetch("/api/add-user-online", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            accept: "application/json",
-          },
-          body: JSON.stringify({
-            ...inputs,
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data.message);
-            history.push("/home");
-          })
-          .catch((err) => console.log(err.message));
+        setDisabledButton(false);
       })
       .catch((err) => console.log(err.message));
   };
@@ -106,6 +81,7 @@ export const Form = ({ email, src, user }) => {
   };
   return (
     <MyForm onSubmit={handleSubmit}>
+      <h3>About Me</h3>
       <input
         value={inputs.name.first || ""}
         name="first"
@@ -184,20 +160,22 @@ export const Form = ({ email, src, user }) => {
 };
 
 const MyForm = styled.form`
+  top: 12rem;
+  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 16rem;
-  height: 250px;
+  height: 17rem;
   background: var(--accent-bg-color);
   border: 1px var(--secondry-color) solid;
   border-radius: 4px;
   box-shadow: 5px 5px 5px;
   button {
-    width: 210px;
-    height: 50px;
+    width: 11rem;
     color: black;
+    font-size: 1rem;
     font-weight: 800;
     background: var(--color-alabama-crimson);
     border: none;
@@ -210,9 +188,9 @@ const MyForm = styled.form`
   }
   input {
     width: 15rem;
-    height: 30px;
     margin: 3px 0;
     border-radius: 2px;
     border: none;
+    font-size: 1rem;
   }
 `;

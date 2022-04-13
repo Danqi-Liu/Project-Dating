@@ -25,7 +25,7 @@ export const Sidebar = () => {
         </NavigationLink>
       </li>
       <li>
-        <NavigationLink to="/liveChat">
+        <NavigationLink to="/inbox">
           <FiBell />
           <MediaQuerySpan>&nbsp;&nbsp;Notifications</MediaQuerySpan>
         </NavigationLink>

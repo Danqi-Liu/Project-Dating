@@ -1,10 +1,13 @@
-import { Form } from "../LoginPage/Form";
+import { UpdateUserForm } from "../UserProfile/UpdateUserForm";
 import { Header } from "../HomePage/Header";
 import { Sidebar } from "../HomePage/SideBar";
 import styled from "styled-components";
 import { useContext, useState } from "react";
 import { CurrentUserContext } from "../CurrentUserContext";
+import { checkSessionStorage } from "../CheckSessionStorage";
+import { UsersContext } from "../UsersContext";
 export const CurrentUserProfile = () => {
+  const { allUsers, setAllUsers } = useContext(UsersContext);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [src, setSrc] = useState("");
   const handleUploadImg = () => {
@@ -29,6 +32,26 @@ export const CurrentUserProfile = () => {
       "currentUser",
       JSON.stringify({ ...currentUser, ...picture })
     );
+    fetch("/api/update-user", {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify({
+        ...currentUser,
+        ...picture,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.message);
+        sessionStorage.setItem("currentUser", JSON.stringify(data.data));
+        setCurrentUser({ ...data.data });
+        setAllUsers([...allUsers, { ...data.data }]);
+        window.location.reload();
+      })
+      .catch((err) => console.log(err.message));
   };
   return (
     <>
@@ -41,36 +64,46 @@ export const CurrentUserProfile = () => {
           onSubmit={handleSubmit}
         >
           <UserImg alt="user image" src={currentUser.picture.medium} />
-          <div>
-            <label htmlFor="image_uploads">Upload an image (PNG, JPG)</label>
-            <input
-              onChange={handleUploadImg}
-              type="file"
-              id="image_uploads"
-              name="image_uploads"
-              accept=".jpg, .jpeg, .png"
-              multiple
-            />
-          </div>
-          <div className="preview">
-            {src ? (
-              <img alt="preview" src={src} />
-            ) : (
-              <p>No files currently selected for upload</p>
-            )}
-          </div>
-          <div>
-            <button type="submit" disabled={src ? false : true}>
-              Submit
-            </button>
-          </div>
+          <p>
+            {currentUser.name.first} {currentUser.name.last}
+          </p>
+          <UploadImgContainer>
+            <div>
+              <label htmlFor="image_uploads">Upload an image (PNG, JPG)</label>
+              <input
+                onChange={handleUploadImg}
+                type="file"
+                id="image_uploads"
+                name="image_uploads"
+                accept=".jpg, .jpeg, .png"
+                multiple
+              />
+            </div>
+            <div className="preview">
+              {src ? (
+                <img alt="preview" src={src} />
+              ) : (
+                <p>No files currently selected for upload</p>
+              )}
+            </div>
+            <div>
+              <button type="submit" disabled={src ? false : true}>
+                Submit
+              </button>
+            </div>
+          </UploadImgContainer>
         </ImageForm>
-        <Form email={currentUser.email} src={src} user={currentUser} />
+        <UpdateUserForm user={checkSessionStorage("currentUser", {})} />
       </SubContainer>
     </>
   );
 };
 const ImageForm = styled.form`
+  p {
+    padding-top: 7rem;
+    font-style: oblique;
+  }
+
   img {
     width: 8rem;
     margin: 20px 0;
@@ -101,7 +134,8 @@ const ImageForm = styled.form`
     }
   }
 `;
-const SubContainer = styled.div`
+export const SubContainer = styled.div`
+  position: relative;
   margin-left: 20vw;
   margin-top: 10px;
   display: flex;
@@ -112,4 +146,19 @@ const UserImg = styled.img`
   width: 8rem;
   border-radius: 40%;
   box-shadow: 0 0 10px;
+  float: left;
+`;
+const UploadImgContainer = styled.div`
+  position: absolute;
+  border: 1px var(--secondry-color) solid;
+  border-radius: 4px;
+  box-shadow: 5px 5px 5px;
+  margin-left: 40vw;
+  width: 35vw;
+  height: 28rem;
+  top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 `;
