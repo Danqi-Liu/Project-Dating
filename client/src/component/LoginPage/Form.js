@@ -4,17 +4,19 @@ import { useHistory } from "react-router-dom";
 import { CurrentUserContext } from "../CurrentUserContext";
 import { UsersContext } from "../UsersContext";
 import { useContext } from "react";
-export const Form = ({ email, src }) => {
+export const Form = ({ email, src, user }) => {
   const { setCurrentUser } = useContext(CurrentUserContext);
   const { allUsers, setAllUsers } = useContext(UsersContext);
-  const [inputs, setInputs] = useState({
-    name: { first: "", last: "" },
-    email: email,
-    gender: "",
-    location: { city: "", state: "", country: "" },
-    dob: { data: "", age: "" },
-    picture: { large: src, medium: src, thumbnail: src },
-  });
+  const [inputs, setInputs] = useState(
+    user || {
+      name: { first: "", last: "" },
+      email: email,
+      gender: "",
+      location: { city: "", state: "", country: "" },
+      dob: { data: "", age: "" },
+      picture: { large: src, medium: src, thumbnail: src },
+    }
+  );
   const [disabledButton, setDisabledButton] = useState(false);
   let history = useHistory();
   const handleSubmit = (ev) => {
@@ -177,16 +179,18 @@ export const Form = ({ email, src }) => {
     </MyForm>
   );
 };
+
 const MyForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
+  width: 16rem;
   height: 250px;
-  margin-right: 200px;
-  background-color: var(--color-orange);
-  border: 2px var(--color-cadmium-red) solid;
+  background: var(--accent-bg-color);
+  border: 1px var(--secondry-color) solid;
+  border-radius: 4px;
+  box-shadow: 5px 5px 5px;
   button {
     width: 210px;
     height: 50px;
@@ -202,8 +206,10 @@ const MyForm = styled.form`
     }
   }
   input {
-    width: 200px;
+    width: 15rem;
     height: 30px;
-    margin-bottom: 5px;
+    margin: 3px 0;
+    border-radius: 2px;
+    border: none;
   }
 `;
