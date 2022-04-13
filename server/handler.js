@@ -47,6 +47,7 @@ const searchUsers = async (req, res) => {
           { "location.city": { $regex: keywords } },
           { gender: { $regex: keywordGender } },
           { email: { $regex: keywords } },
+          { "dob.age": Number(req.query.keywords) },
         ],
       })
       .toArray();
@@ -210,7 +211,7 @@ const addUser = async (req, res) => {
     const result = await db.collection("users").insertOne(obj);
     res.status(201).json({ status: 201, data: obj, message: "user added" });
   } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
+    res.status(500).json({ status: 500, data: obj, message: err.message });
   }
   client.close();
 };
@@ -286,6 +287,40 @@ const deleteUserOnline = async (req, res) => {
   }
   client.close();
 };
+//update a user,expect body=userObj
+const updateUser = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const obj = req.body;
+  delete obj._id;
+
+  try {
+    await client.connect();
+    const db = client.db("dating");
+    const query = { email: obj.email };
+
+    const result = await db.collection("users").replaceOne(query, obj);
+    console.log(result);
+    if (result.modifiedCount === 1) {
+      res
+        .status(200)
+        .json({ status: 200, data: req.body, message: "user updated" });
+    } else if (result.modifiedCount === 0 && result.matchedCount === 1) {
+      res.status(400).json({
+        status: 400,
+        data: req.body,
+        message: "same user infomation, no need to update",
+      });
+    } else {
+      res
+        .status(404)
+        .json({ status: 404, data: req.body, message: "Not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+};
+
 module.exports = {
   getUsers,
   searchUsers,
@@ -297,4 +332,5 @@ module.exports = {
   addFriend,
   addUserOline,
   deleteUserOnline,
+  updateUser,
 };

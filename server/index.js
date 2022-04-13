@@ -15,6 +15,7 @@ const {
   addFriend,
   addUserOline,
   deleteUserOnline,
+  updateUser,
 } = require("./handler");
 
 express()
@@ -41,7 +42,7 @@ express()
   .get("/api/get-users", getUsers)
   //search users
   .get("/api/search-users", searchUsers)
-  //search users by gender and age
+  //search users by gender & age & location
   .get("/api/search-gender-age-location", searchUsersGenderAgeLocation)
   //get some random users
   .get("/api/get-random-users", getRandomUsers)
@@ -53,10 +54,12 @@ express()
   .post("/api/add-user", addUser)
   //add friend to current user
   .patch("/api/add-friends", addFriend)
-  //add user to online list
+  //add current user to online list
   .post("/api/add-user-online", addUserOline)
   //delete a user from online list
   .delete("/api/delete-user-online/:email", deleteUserOnline)
+  //update a user
+  .put("/api/update-user", updateUser)
 
   // Handles all the endpoints
   .get("*", (req, res) => {
