@@ -1,20 +1,32 @@
 import "react-slideshow-image/dist/styles.css";
-import { Slide, Zoom } from "react-slideshow-image";
+import { Slide } from "react-slideshow-image";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
+import { UsersContext } from "../UsersContext";
 export const SlideShow = () => {
+  const { allUsers } = useContext(UsersContext);
   const [randomUsers, setRandomUsers] = useState([]);
   const [status, setStatus] = useState("loading");
   useEffect(() => {
-    setStatus("loading");
-    fetch("/api/get-random-users")
-      .then((res) => res.json())
-      .then((data) => {
-        setRandomUsers([...data.data]);
-        setStatus("idle");
-      })
-      .catch((err) => console.log(err.message));
+    if (allUsers.length === 0) {
+      setStatus("loading");
+      fetch("/api/get-random-users")
+        .then((res) => res.json())
+        .then((data) => {
+          setRandomUsers([...data.data]);
+          setStatus("idle");
+        })
+        .catch((err) => console.log(err.message));
+    } else {
+      let arr = [];
+      for (let i = 0; i < 50; i++) {
+        let randomNumber = Math.floor(Math.random() * 1001);
+        arr.push(allUsers[randomNumber]);
+      }
+      setRandomUsers([...arr]);
+      setStatus("idle");
+    }
   }, []);
 
   const properties = {
