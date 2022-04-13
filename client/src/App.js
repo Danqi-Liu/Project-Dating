@@ -5,6 +5,7 @@ import LoginPage from "./component/LoginPage";
 import UserProfile from "./component/UserProfile";
 import { CurrentUserProfile } from "./component/CurrentUserProfile";
 import { Inbox } from "./component/CurrentUserProfile/Inbox";
+import { FallingHearts } from "./component/LoginPage/FallingHearts";
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             <LoginPage />
+            <FallingHearts number={12} />
           </Route>
           <Route exact path="/home">
             <HomePage />

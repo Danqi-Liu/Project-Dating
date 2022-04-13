@@ -8,11 +8,32 @@ export const Header = () => {
   const [search, setSearch] = useState("");
   const { status, setStatus, setRenderUsers, setCount, setUsers } =
     useContext(UsersContext);
+  let count = 0;
+  const colorArr = ["#cc5500", "red", "purple", "blue"];
+  const mainbgColor = ["pink", "white", "gold", "gray"];
+  const textColor = ["black", "Fuchsia", "DarkViolet", "GoldenRod"];
+  const hoverColor = ["red", "blue", "Indigo", "DeepPink"];
+  const handleToggleTheme = (count) => {
+    document.documentElement.style.setProperty(
+      "--primary-color",
+      colorArr[count % 4]
+    );
+    document.documentElement.style.setProperty(
+      "--main-bg-color",
+      mainbgColor[count % 4]
+    );
+    document.documentElement.style.setProperty(
+      "--text-color",
+      textColor[count % 4]
+    );
+    document.documentElement.style.setProperty(
+      "--hover-color",
+      hoverColor[count % 4]
+    );
+  };
   const handleSearch = (ev) => {
     ev.preventDefault();
-
     const keyword = search.trim();
-
     if (keyword === "") {
       return;
     } else {
@@ -56,7 +77,7 @@ export const Header = () => {
           Search
         </button>
       </form>
-      <button>Theme</button>
+      <button onClick={() => handleToggleTheme(count++)}>Theme</button>
       <LogoutButton />
     </Wrapper>
   );
@@ -83,6 +104,7 @@ const Wrapper = styled.div`
     width: 7rem;
     font-weight: 700;
     background: var(--main-bg-color);
+    color: var(--text-color);
     &:hover {
       color: var(--hover-color);
       background: var(--secondry-bg-color);
