@@ -2,7 +2,13 @@
 
 const express = require("express");
 const morgan = require("morgan");
-
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  /* options */
+});
 const PORT = 8000;
 const {
   getUsers,
@@ -18,7 +24,8 @@ const {
   updateUser,
 } = require("./handler");
 
-express()
+// express()
+app
   .use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Methods",
@@ -67,6 +74,11 @@ express()
       status: 404,
       message: "This is obviously not what you are looking for.",
     });
-  })
+  });
 
-  .listen(PORT, () => console.info(`Listening on port ${PORT}`));
+// .listen(PORT, () => console.info(`Listening on port ${PORT}`));
+//socket
+io.on("connection", (socket) => {
+  // ...
+});
+httpServer.listen(PORT, () => console.info(`Listening on port ${PORT}`));
