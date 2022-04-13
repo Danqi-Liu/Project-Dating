@@ -160,31 +160,20 @@ const leaveMessage = async (req, res) => {
 const getMyMessage = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const email = req.query.email;
-  const resData = [];
   try {
     await client.connect();
     const db = client.db("dating");
-    const result = await db.collection("messageBoard").findOne({
-      recieverEmail: email,
-    });
+    const result = await db
+      .collection("messageBoard")
+      .find({
+        recieverEmail: email,
+      })
+      .toArray();
 
     if (result) {
-      resData.push({ meaasge: result.message });
-      const result2 = await db.collection("users").findOne({
-        email: result.senderEmail,
-      });
-      if (result2) {
-        resData.push({ sender: result2 });
-        res
-          .status(200)
-          .json({ status: 200, data: resData, message: "message retrieved" });
-      } else {
-        res.status(404).json({
-          status: 404,
-          data: [result.senderEmail],
-          message: `No matched user in users`,
-        });
-      }
+      res
+        .status(200)
+        .json({ status: 200, data: result, message: "message retrieved" });
     } else {
       res.status(404).json({
         status: 404,
@@ -290,7 +279,7 @@ const deleteUserOnline = async (req, res) => {
 //update a user,expect body=userObj
 const updateUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  const obj = req.body;
+  const obj = { ...req.body };
   delete obj._id;
 
   try {
