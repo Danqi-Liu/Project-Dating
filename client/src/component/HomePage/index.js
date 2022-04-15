@@ -8,7 +8,11 @@ import { Sidebar } from "./SideBar";
 const HomePage = () => {
   const { status, users, renderUsers, setRenderUsers, count, setCount } =
     useContext(UsersContext);
-
+  // console.log(document.cookie);
+  // document.cookie =
+  //   "_legacy_auth0.A7a1QJxLdRGr4IhJrfEf0EpamScsu8Jn.is.authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  // document.cookie =
+  //   "auth0.A7a1QJxLdRGr4IhJrfEf0EpamScsu8Jn.is.authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   console.log(count);
   const handleLoadMore = () => {
     let user20Array = [];

@@ -8,7 +8,7 @@ export const Header = () => {
   const [search, setSearch] = useState("");
   const { status, setStatus, setRenderUsers, setCount, setUsers } =
     useContext(UsersContext);
-  let count = 0;
+  let count = 1;
   const colorArr = ["#cc5500", "red", "purple", "blue"];
   const mainbgColor = ["pink", "white", "gold", "gray"];
   const textColor = ["black", "Fuchsia", "DarkViolet", "GoldenRod"];

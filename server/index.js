@@ -9,6 +9,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   /* options */
 });
+let socketUserArray = [];
 const PORT = 8000;
 const {
   getUsers,
@@ -22,6 +23,7 @@ const {
   addUserOline,
   deleteUserOnline,
   updateUser,
+  getOnlineUsers,
 } = require("./handler");
 
 // express()
@@ -67,6 +69,8 @@ app
   .delete("/api/delete-user-online/:email", deleteUserOnline)
   //update a user
   .put("/api/update-user", updateUser)
+  //get online users
+  .get("/api/get-online-users", getOnlineUsers)
 
   // Handles all the endpoints
   .get("*", (req, res) => {
@@ -77,8 +81,36 @@ app
   });
 
 // .listen(PORT, () => console.info(`Listening on port ${PORT}`));
-//socket
+//socket, join obj={myEmail,id}
+//message obj={recieverEmail,myEmail,myName,message}
 io.on("connection", (socket) => {
-  // ...
+  // .....
+  console.log(socket.id);
+  socket.on("join", (obj) => {
+    console.log("join start", obj);
+    if (socketUserArray.length === 0) {
+      socketUserArray.push({ ...obj });
+    } else if (socketUserArray.some((el) => el.myEmail === obj.myEmail)) {
+      let arr = socketUserArray.map((el) => {
+        return el.myEmail === obj.myEmail ? obj : el;
+      });
+      socketUserArray = [...arr];
+    } else {
+      socketUserArray.push({ ...obj });
+    }
+    console.log("join finished", socketUserArray);
+  });
+  socket.on("message", (obj) => {
+    console.log(obj);
+    console.log(socket.id);
+    const reciever = socketUserArray.find(
+      (el) => el.myEmail === obj.recieverEmail
+    );
+    io.to(reciever.id).emit("recievedMsg", {
+      senderEmail: obj.myEmail,
+      senderName: obj.myName,
+      message: obj.message,
+    });
+  });
 });
 httpServer.listen(PORT, () => console.info(`Listening on port ${PORT}`));

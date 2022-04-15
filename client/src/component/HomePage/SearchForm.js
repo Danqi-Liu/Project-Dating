@@ -55,7 +55,7 @@ export const SearchForm = ({ setSearchFormOpened }) => {
       >
         <option value="female">Looking for a Woman</option>
         <option value="male">Looking for a Man</option>
-        <option value="">Looking for a Woman or Man</option>
+        {/* <option value="">Looking for a Woman or Man</option> */}
       </select>
       <span>Ages</span>
       <select

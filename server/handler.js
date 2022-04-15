@@ -78,7 +78,7 @@ const searchUsersGenderAgeLocation = async (req, res) => {
   const startAge = Number(req.query.startAge);
   const endAge = Number(req.query.endAge);
   const location = new RegExp(req.query.location, "i");
-  console.log(location);
+  console.log(gender);
   try {
     await client.connect();
     const db = client.db("dating");
@@ -309,7 +309,28 @@ const updateUser = async (req, res) => {
   }
   client.close();
 };
-
+const getOnlineUsers = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("dating");
+    const result = await db.collection("online").find().toArray();
+    if (result.length) {
+      res.status(200).json({
+        status: 200,
+        data: result,
+        message: `get online users succeeded`,
+      });
+    } else {
+      res
+        .status(404)
+        .json({ status: 404, data: [], message: "online users not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+};
 module.exports = {
   getUsers,
   searchUsers,
@@ -322,4 +343,5 @@ module.exports = {
   addUserOline,
   deleteUserOnline,
   updateUser,
+  getOnlineUsers,
 };
