@@ -1,18 +1,29 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { FiHome, FiBell, FiBookmark, FiUser, FiSearch } from "react-icons/fi";
+import { FiHome, FiBell, FiUser, FiSearch } from "react-icons/fi";
 import { FaUserFriends } from "react-icons/fa";
 import { CurrentUserContext } from "../CurrentUserContext";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { SearchForm } from "./SearchForm";
 import { Link } from "react-router-dom";
 import { LiveChat } from "../LiveChat";
 export const Sidebar = () => {
   const { currentUser } = useContext(CurrentUserContext);
   const [searchFormOpened, setSearchFormOpened] = useState(false);
+  const [loadingOnlineUsers, setLoadingOnlineUsers] = useState(true);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [openUserList, setOpenUserList] = useState(false);
+  const [openUserList, setOpenUserList] = useState(true);
   const [chatUser, setChatUser] = useState({});
+  useEffect(() => {
+    fetch("/api/get-online-users")
+      .then((res) => res.json())
+      .then((data) => {
+        setOnlineUsers([...data.data]);
+        setChatUser({});
+        setLoadingOnlineUsers(false);
+      })
+      .catch((err) => console.log(err.message));
+  }, []);
   const handleSearchButtonClick = () => {
     setSearchFormOpened(!searchFormOpened);
   };
@@ -27,7 +38,7 @@ export const Sidebar = () => {
         })
         .catch((err) => console.log(err.message));
     } else {
-      setOpenUserList(false);
+      setOpenUserList(!openUserList);
     }
   };
   const handleSelectChatUser = (ev) => {
@@ -70,7 +81,7 @@ export const Sidebar = () => {
           <MediaQuerySpan>&nbsp;&nbsp;Online Users</MediaQuerySpan>
         </SearchButton>
       </li>
-      {openUserList === true && (
+      {openUserList === true && loadingOnlineUsers === false && (
         <>
           <OnlineUser>
             {onlineUsers.map((el) => {
@@ -131,7 +142,7 @@ const NavigationLink = styled(NavLink)`
   display: inline-block;
   text-align: center;
   border-radius: 8px;
-  margin: 1.5rem 0 0 2rem;
+  margin: 1.5rem 0 0 1.5rem;
   &.active {
     color: Purple;
     text-decoration: none;
@@ -148,7 +159,7 @@ const SearchButton = styled.div`
   display: inline-block;
   text-align: center;
   border-radius: 8px;
-  margin: 1.5rem 0 0 2rem;
+  margin: 1.5rem 0 0 1.5rem;
   &.active {
     color: Purple;
     text-decoration: none;

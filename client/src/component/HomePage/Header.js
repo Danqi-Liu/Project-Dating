@@ -64,7 +64,7 @@ export const Header = () => {
     <Wrapper>
       <MyLink to="/home">
         <img alt="heart img" src={process.env.PUBLIC_URL + "/heart.png"} />
-        <span>Lovigo</span>
+        <MediaQuerySpan>Lovigo</MediaQuerySpan>
       </MyLink>
       <form onSubmit={handleSearch}>
         <input
@@ -73,11 +73,11 @@ export const Header = () => {
           onChange={(ev) => setSearch(ev.target.value)}
           placeholder="search here"
         ></input>
-        <button type="submit" disabled={status === "loading" ? true : false}>
+        <Button type="submit" disabled={status === "loading" ? true : false}>
           Search
-        </button>
+        </Button>
       </form>
-      <button onClick={() => handleToggleTheme(count++)}>Theme</button>
+      <Button onClick={() => handleToggleTheme(count++)}>Theme</Button>
       <LogoutButton />
     </Wrapper>
   );
@@ -98,31 +98,36 @@ const Wrapper = styled.div`
     border-radius: 4px;
     font-size: 0.8rem;
   }
-  button {
-    font-size: 1.3rem;
-    height: 60px;
-    width: 7rem;
-    font-weight: 700;
-    background: var(--main-bg-color);
-    color: var(--text-color);
-    &:hover {
-      color: var(--hover-color);
-      background: var(--secondry-bg-color);
-      transform: scale(1.05);
-    }
-    &:disabled {
-      opacity: 60%;
-    }
-  }
   span {
     font-family: "Beau Rivage", cursive;
     font-weight: 700;
-    font-size: 35px;
+    font-size: 1.5rem;
     position: absolute;
-    top: 10px;
+    top: 20px;
   }
 `;
 const MyLink = styled(Link)`
   position: relative;
   height: 60px;
+`;
+const MediaQuerySpan = styled.span`
+  @media (max-width: 900px) {
+    display: none;
+  }
+`;
+const Button = styled.button`
+  font-size: 1.3rem;
+  height: 60px;
+  width: 6rem;
+  font-weight: 700;
+  background: var(--main-bg-color);
+  color: var(--text-color);
+  &:hover {
+    color: var(--hover-color);
+    background: var(--secondry-bg-color);
+    transform: scale(1.05);
+  }
+  &:disabled {
+    opacity: 60%;
+  }
 `;
