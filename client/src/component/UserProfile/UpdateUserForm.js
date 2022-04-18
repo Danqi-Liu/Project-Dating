@@ -185,6 +185,10 @@ const MyForm = styled.form`
     &:active {
       color: blue;
     }
+    &:hover {
+      color: var(--hover-color);
+      transform: scale(1.05);
+    }
   }
   input {
     width: 15rem;

@@ -64,7 +64,12 @@ const UserProfile = () => {
           <h1>loading</h1>
         ) : (
           <div>
-            <p>About {user.gender === "male" ? "him" : "her"}:</p>
+            {currentUser.email === email ? (
+              <p>About yourself:</p>
+            ) : (
+              <p>About {user.gender === "male" ? "him" : "her"}:</p>
+            )}
+
             <p>Email: &nbsp; {user.email}</p>
             <p>Birthday: &nbsp;{birthday}</p>
             <p>
@@ -86,7 +91,7 @@ from {
   background-position: 0
   }
   to {
-    background-position: 22rem;
+    background-position: 17rem;
   }`;
 const Wrapper = styled.div`
   position: relative;

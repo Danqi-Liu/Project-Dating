@@ -5,6 +5,7 @@ import { UserCell } from "./UserCell";
 import { SlideShow } from "./SlideShow";
 import styled from "styled-components";
 import { Sidebar } from "./SideBar";
+import { LoadingAnimation } from "../LoadingAnimation";
 const HomePage = () => {
   const { status, users, renderUsers, setRenderUsers, count, setCount } =
     useContext(UsersContext);
@@ -29,7 +30,9 @@ const HomePage = () => {
       <Header />
       <SlideShow />
       {status === "loading" ? (
-        <h1>Loading</h1>
+        <h1>
+          <LoadingAnimation size={64} />
+        </h1>
       ) : (
         <>
           <ContentContainer>

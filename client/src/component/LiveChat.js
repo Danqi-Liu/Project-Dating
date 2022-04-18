@@ -9,15 +9,18 @@ export const LiveChat = ({ user }) => {
     socket.emit("join", { myEmail: currentUser.email, id: socket.id });
   }, []);
   const [messageArray, setMessageArray] = useState([
-    "welcome to the live chat",
+    { msg: "welcome to the live chat", author: "system" },
   ]);
   const [input, setInput] = useState("");
   const handleSendMessage = (event) => {
     event.preventDefault();
     if (Object.keys(user).length === 0) {
-      setMessageArray(["Choose a user to chat first", ...messageArray]);
+      setMessageArray([
+        { msg: "Choose a user to chat first", author: "system" },
+        ...messageArray,
+      ]);
     } else {
-      setMessageArray([input, ...messageArray]);
+      setMessageArray([{ msg: input, author: "me" }, ...messageArray]);
       setInput("");
       socket.emit("message", {
         recieverEmail: user.email,
@@ -31,16 +34,23 @@ export const LiveChat = ({ user }) => {
     setInput(ev.target.value);
   };
   socket.on("recievedMsg", (obj) => {
-    console.log(obj.message);
-    console.log(obj.senderName);
-    setMessageArray([`${obj.senderName}:${obj.message}`, ...messageArray]);
+    setMessageArray([
+      { msg: `${obj.senderName}:${obj.message}`, author: "other" },
+      ...messageArray,
+    ]);
   });
   return (
     <Wrapper className="chat-app">
       <MessageList>
-        {messageArray.map((el, index) => (
-          <p key={el + index}>{el}</p>
-        ))}
+        {messageArray.map((el, index) => {
+          if (el.author === "system") {
+            return <SystemP key={el.msg + index}>{el.msg}</SystemP>;
+          } else if (el.author === "me") {
+            return <MyP key={el.msg + index}>{el.msg}</MyP>;
+          } else {
+            return <OtherP key={el.msg + index}>{el.msg}</OtherP>;
+          }
+        })}
       </MessageList>
       <form className="user-form" onSubmit={handleSendMessage}>
         <input
@@ -60,11 +70,28 @@ const MessageList = styled.div`
   overflow-y: scroll;
   display: flex;
   flex-direction: column-reverse;
+  p {
+    /* width: 18vw; */
+    padding: 2px 0;
+  }
 `;
+const SystemP = styled.p`
+  text-align: center;
+  background: var(--main-bg-color);
+`;
+const OtherP = styled.p`
+  text-align: left;
+  background: var(--secondry-bg-color);
+`;
+
+const MyP = styled.p`
+  text-align: right;
+`;
+
 const Wrapper = styled.div`
   margin-left: 1vw;
   width: 20vw;
-  background: var(--secondry-bg-color);
+  background: snow;
   input {
     width: 15vw;
     font-size: 0.8rem;

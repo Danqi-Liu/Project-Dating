@@ -5,6 +5,7 @@ import { SubContainer } from "./index";
 import { CurrentUserContext } from "../CurrentUserContext";
 import { useContext, useEffect, useState } from "react";
 import { MessageSender } from "./MessageSender";
+import { LoadingAnimation } from "../LoadingAnimation";
 export const Inbox = () => {
   const [messages, setMessages] = useState([]);
   const [loadingMessages, setLoadingMessages] = useState(true);
@@ -25,14 +26,16 @@ export const Inbox = () => {
       <Sidebar />
       <SubContainer>
         {loadingMessages === true ? (
-          <h1>loading</h1>
+          <h1>
+            <LoadingAnimation size={64} />
+          </h1>
         ) : (
           messages.map((el) => {
             return (
-              <div key={el._id}>
+              <Div key={el._id}>
                 <MessageSender senderEmail={el.senderEmail} />
-                {el.message}
-              </div>
+                <span>&nbsp;{el.message}</span>
+              </Div>
             );
           })
         )}
@@ -40,3 +43,7 @@ export const Inbox = () => {
     </>
   );
 };
+const Div = styled.div`
+  display: flex;
+  align-items: center;
+`;

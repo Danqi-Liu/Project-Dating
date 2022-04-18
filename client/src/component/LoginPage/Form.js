@@ -36,7 +36,8 @@ export const Form = ({ email, src, user }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data.message);
-        sessionStorage.setItem("currentUser", JSON.stringify(data.date));
+
+        sessionStorage.setItem("currentUser", JSON.stringify({ ...data.data }));
         setCurrentUser({ ...data.data });
         setAllUsers([...allUsers, inputs]);
         return fetch("/api/add-user-online", {

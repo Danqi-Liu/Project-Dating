@@ -40,8 +40,8 @@ const searchUsers = async (req, res) => {
       .collection("users")
       .find({
         $or: [
-          { name: { first: { $regex: keywords } } },
-          { name: { last: { $regex: keywords } } },
+          { "name.first": { $regex: keywords } },
+          { "name.last": { $regex: keywords } },
           { "location.country": { $regex: keywords } },
           { "location.state": { $regex: keywords } },
           { "location.city": { $regex: keywords } },

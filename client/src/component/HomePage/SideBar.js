@@ -34,7 +34,7 @@ export const Sidebar = () => {
     const user = onlineUsers.find((el) => el.email === ev.target.value);
     setChatUser({ ...user });
   };
-  console.log("chatUser", chatUser);
+
   return (
     <Wrapper>
       <li>

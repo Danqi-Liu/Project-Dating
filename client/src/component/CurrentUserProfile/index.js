@@ -6,8 +6,10 @@ import { useContext, useState } from "react";
 import { CurrentUserContext } from "../CurrentUserContext";
 import { checkSessionStorage } from "../CheckSessionStorage";
 import { UsersContext } from "../UsersContext";
+import { LoadingAnimation } from "../LoadingAnimation";
 export const CurrentUserProfile = () => {
   const { allUsers, setAllUsers } = useContext(UsersContext);
+  const [uploadingImg, setUploadingImg] = useState(false);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [src, setSrc] = useState("");
   const handleUploadImg = () => {
@@ -24,6 +26,7 @@ export const CurrentUserProfile = () => {
   };
   const handleSubmit = (ev) => {
     ev.preventDefault();
+    setUploadingImg(true);
     const picture = {
       picture: { large: src, medium: src, thumbnail: src },
     };
@@ -49,6 +52,7 @@ export const CurrentUserProfile = () => {
         sessionStorage.setItem("currentUser", JSON.stringify(data.data));
         setCurrentUser({ ...data.data });
         setAllUsers([...allUsers, { ...data.data }]);
+        setUploadingImg(false);
         window.location.reload();
       })
       .catch((err) => console.log(err.message));
@@ -88,7 +92,11 @@ export const CurrentUserProfile = () => {
             </div>
             <div>
               <button type="submit" disabled={src ? false : true}>
-                Submit
+                {uploadingImg ? (
+                  <LoadingAnimation size={32} />
+                ) : (
+                  <span>Upload</span>
+                )}
               </button>
             </div>
           </UploadImgContainer>

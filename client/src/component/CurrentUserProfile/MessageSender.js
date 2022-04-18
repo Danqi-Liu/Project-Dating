@@ -10,11 +10,19 @@ export const MessageSender = ({ senderEmail }) => {
     user = { ...arr[0] };
   }
   return (
-    <Link to={`/users/${senderEmail}`}>
+    <MyLink to={`/users/${senderEmail}`}>
       <Img alt="sneder image" src={user.picture.thumbnail} />
-    </Link>
+      <span>
+        {user.name.first} {user.name.last}:
+      </span>
+    </MyLink>
   );
 };
+const MyLink = styled(Link)`
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+`;
 const Img = styled.img`
   width: 2rem;
   border-radius: 50%;

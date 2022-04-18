@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { checkSessionStorage } from "../CheckSessionStorage";
 import styled from "styled-components";
-
+import { LoadingAnimation } from "../LoadingAnimation";
 const LoginPage = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const { allUsers, status } = useContext(UsersContext);
@@ -46,7 +46,9 @@ const LoginPage = () => {
   if (status === "loading" || isLoading) {
     return (
       <Div>
-        <h1>loading</h1>
+        <h1>
+          <LoadingAnimation size={64} />
+        </h1>
       </Div>
     );
   } else {
